@@ -15,7 +15,7 @@ app.use(express.static('./node_modules/nipplejs'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(expressValidator())
 app.use(expressSession({
-	secret: '@asda#?!a',
+	secret: '',
 	resave: false,
 	saveUninitialized: false
 }))
