@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+ <html>
+    <head>
+       <title>Sessão</title>
+       <link href="material-icons.css" rel="stylesheet">
+       <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+       <link type="text/css" rel="stylesheet" href="css/style.css"  media="screen,projection"/>
+       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body onload="armazenarTempo()">
+      <header>
+        <nav class="blue darken-2">
+          <div class="nav-wrapper container">
+            <a href="/home" class="brand-logo">Andador</a>
+            <a href="#" data-activates="nav-mobile" class="button-collapse">
+              <i class="material-icons">menu</i>
+            </a>
+            <ul class="right">
+              <i class="material-icons">battery_std</i>
+            </ul>
+            <ul id="nav" class="right hide-on-med-and-down">
+              <li><a href="">Pausar Sessão</a></li>
+              <li onclick="armazenarTempoFinal"><a href="/encerrarSessao">Encerrar Sessão</a></li>
+            </ul>
+          </div>
+        </nav>
+
+        <ul class="side-nav" id="nav-mobile">
+          <li><a class="waves-effect" href="">Pausar Sessão</a></li>
+          <li onclick="armazenarTempoFinal"><a class="waves-effect" href="/encerrarSessao">Encerrar Sessão</a></li>
+        </ul>
+      </header>
+
+      <div class="flex-div">
+        <div class="row flex-div">
+          <div class="col s2"><input id='esquerda' class='botao-controle' type='button' /></div>
+          <div class="col s2"><input id='direita' class='botao-controle' type='button' /></div>
+
+          <div class="col s2"><input id='re' class='botao-controle' type='button' /></div>
+          <div class="col s2"><input id='acelerar' class='botao-controle' type='button' /></div>
+        </div>
+      </div>
+
+      <footer class="page-footer transparent">
+      </footer>
+
+      <script src="js/jquery.js"></script>
+      <script src="js/materialize.js"></script>
+
+      <script>
+          $(document).ready(function(){
+              $(".button-collapse").sideNav({
+                  menuWidth: 250,
+                  draggable: true
+              });
+          });
+
+      </script>
+
+    </body>
+    <script>
+       var intervalo = 0;
+       $('#acelerar').on('touchstart', function(){
+          intervalo = setInterval(function(){
+            $.post("/sessao", {direcao: "frente"})
+         },500)
+       })
+       $('#acelerar').on('touchend', function(){
+          $.post("/sessao", {direcao: "parar"})
+          clearTimeout(intervalo)
+          intervalo = 0
+       })
+       $('#re').on('touchstart', function(){
+          intervalo = setInterval(function(){
+            $.post("/sessao", {direcao: "atras"})
+         },500)
+       })
+       $('#re').on('touchend', function(){
+          $.post("/sessao", {direcao: "parar"})
+          clearTimeout(intervalo)
+          intervalo = 0
+       })
+       $('#direita').on('touchstart', function(){
+          $.post("/sessao", {direcao: "direita"})
+       })
+       $('#esquerda').on('touchstart', function(){
+          $.post("/sessao", {direcao: "esquerda"})
+       })
+    </script>
+    <script>
+      var d = new Date()
+      var tempoInicial
+      var tempoFinal
+      function armazenarTempo(){
+         tempoInicial = d.getTime()
+         console.log("Tempo inicial")
+         console.log(tempoInicial)
+      }
+      function armazenarTempoFinal(){
+         tempoFinal = d.getTime()
+         console.log("Tempo inicial")
+         console.log(tempoInicial)
+         console.log("Tempo final")
+         console.log(tempoFinal)
+      }
+
+      clearTimeout(timerId);
+      var timerId = null;
+
+      function cronometro(){
+        $('#tempo_restante').each(function(){
+          var segundos = $(this).html();
+          var segundos_atuais = parseInt(segundos) + 1;
+
+          $this.html(segundos_atuais);
+        });
+        setTimeout('cronometro()', 1000);
+      }
+    </script>
+</html>

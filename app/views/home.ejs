@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+ <html>
+    <head>
+       <title>Home</title>
+       <link href="material-icons.css" rel="stylesheet">
+       <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+       <link type="text/css" rel="stylesheet" href="css/style.css"  media="screen,projection"/>
+       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+       <script>
+         var query = location.search.slice(1);
+         var partes = query.split('&');
+         var data = {};
+         partes.forEach(function (parte) {
+           var chaveValor = parte.split('=');
+           var chave = chaveValor[0];
+           var valor = chaveValor[1];
+           data[chave] = valor;
+         });
+         if(data.valid){
+           alert("Usuário excluído com sucesso.");
+           var uri = window.location.toString();
+           var clean_uri = uri.substring(0, uri.indexOf("?"));
+           window.history.replaceState({}, document.title, clean_uri);
+         }
+       </script>
+    </head>
+
+    <body class="fundo-pagina">
+      <header>
+        <nav class="blue darken-2">
+          <div class="nav-wrapper container">
+            <a href="/home" class="brand-logo">Andador</a>
+            <a href="" data-activates="nav-mobile" class="button-collapse">
+              <i class="material-icons">menu</i>
+            </a>
+            <ul class="right">
+              <i class="material-icons">battery_std</i>
+            </ul>
+
+            <ul id="nav" class="right hide-on-med-and-down">
+              <li><a class="waves-effect" href="/sessao?id_paciente=0">Iniciar sessão anônima</a></li>
+              <li><a class='dropdown-button' data-beloworigin="true" data-activates='dropdown-menu'>
+                <i class="material-icons">more_vert</i>
+              </a></li>
+            </ul>
+          </div>
+        </nav>
+
+        <ul class="side-nav" id="nav-mobile">
+          <li><a class="waves-effect" href="/sessao?id_paciente=0">Iniciar sessão anônima</a></li>
+          <li><a class="waves-effect" href="/alterar-dados">Alterar dados pessoais</a></li>
+          <li><a class="waves-effect" href="/sair">Sair</a></li>
+        </ul>
+
+        <ul id='dropdown-menu' class='dropdown-content'>
+          <li><a href="/alterar-dados">Alterar dados</a></li>
+          <li class="divider"></li>
+          <li><a href="/sair">Sair</a></li>
+        </ul>
+      </header>
+
+      <div class="container div-body fundo-pagina">
+        <div class="card">
+          <div class="card-content">
+            <h5>Bem-vindo ao sistema!</h5>
+            <p>Cadastre um novo paciente no sistema: <a href="/cadastrar-paciente">cadastrar um novo paciente</a></p>
+          </div>
+        </div>
+
+        <% if(pacientes.length > 0){ %>
+          <div class="card">
+          <div class="card-content">
+          <h4>Meus pacientes:</h4>
+          <ul class="collapsible" data-collapsible="accordion">
+          <% for(var i = 0; i < pacientes.length; i++) { %>
+            <li>
+              <div class="collapsible-header">
+
+                <i class="material-icons">person</i>
+                <a href="/paciente?id_paciente=<%=pacientes[i].ID_PACIENTE%>" class="link-nome">
+                  <%=pacientes[i].NOME_PACIENTE%>
+                </a>
+                <span class="badge"><i class="material-icons right">expand_more</i></span>
+              </div>
+              <div class="collapsible-body">
+                <a href="/paciente?id_paciente=<%=pacientes[i].ID_PACIENTE%>">Ver página do paciente</a>
+                <p><b>Sexo:</b> <%=pacientes[i].SEXO_PACIENTE%></p>
+                <p><b>Data de nascimento:</b> <%=pacientes[i].DATA_DE_NASCIMENTO_PACIENTE%></p>
+                <div class="row">
+                  <a href="/ajustarAltura?id_paciente=<%=pacientes[i].ID_PACIENTE%>">
+                    <button class="btn green resp-btn" type="submit" name="action">
+                      Inciar sessão com o paciente
+                    </button>
+                  </a>
+                  <a href="/editar-paciente?id_paciente=<%=pacientes[i].ID_PACIENTE%>">
+                    <button class="btn blue resp-btn" type="button">
+                      Alterar dados do paciente
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </li>
+          <%}%>
+          </ul>
+        </div>
+        </div>
+        <%}else{%>
+          <div class="card">
+            <div class="card-content">
+              <h5>Meus pacientes:</h5>
+              <p>Você não possui pacientes cadastrados.</p>
+            </div>
+          </div>
+        <%}%>
+
+
+
+      </div>
+
+      <footer class="page-footer black">
+        <div class="right">
+          © 2017 LaMIC
+        <div>
+      </footer>
+
+      <script src="js/jquery.js"></script>
+      <script src="js/materialize.js"></script>
+
+      <script>
+          $(document).ready(function(){
+              $(".button-collapse").sideNav({
+                  menuWidth: 300,
+                  draggable: true
+              });
+          });
+          $('.collapsible').collapsible('open', 0);
+
+          $(document).ready(function(){
+              $('.dropdown-button').dropdown({
+                constrainWidth: false
+              });
+          });
+      </script>
+      <script>
+
+
+      </script>
+
+    </body>
+</html>
